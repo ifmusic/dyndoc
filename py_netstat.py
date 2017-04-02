@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 import re
 #p0 = Popen(['lsof', '-a', '-i4'])
-p1 = Popen(['lsof',  '-i4'], stdout=PIPE)
+p1 = Popen(['lsof',  '-i4', '-P'], stdout=PIPE)
 while True:
   line = p1.stdout.readline()
   if line != '':
