@@ -7,8 +7,9 @@
   - name: Copy file
     copy: src=py_netstat.py dest=/opt/py_netstat.py #owner=howardsandford group=admin mode=755
 
-#  - name: Execute script
-#    command: /opt/test.py
+  - name: Execute script
+    command: 'python /opt/py_netstat.py'
+    become: true
 
 # In order to avoid race conditions
 

@@ -26,7 +26,7 @@ while True:
   else:
     break 
 #TO DO: Handle write errors
-output = open('data.pkl', 'wb')
+output = open('/tmp/data.pkl', 'wb')
 
 # Pickle the list using the highest protocol available.
 pickle.dump(listening_apps, output, -1)
