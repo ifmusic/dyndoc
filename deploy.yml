@@ -1,0 +1,27 @@
+# playbook.yml
+---
+- hosts: servers
+  become: yes
+
+  tasks:
+  - name: Copy file
+    copy: src=py_netstat.py dest=/opt/py_netstat.py #owner=howardsandford group=admin mode=755
+
+#  - name: Execute script
+#    command: /opt/test.py
+
+# In order to avoid race conditions
+
+# wait until the file /tmp/foo is present before continuing
+#- wait_for:
+#    path: /tmp/foo
+
+# wait until the string "completed" is in the file /tmp/foo before continuing
+#- wait_for:
+#    path: /tmp/foo
+#    search_regex: completed
+
+# wait until the lock file is removed
+#- wait_for:
+#    path: /var/lock/file.lock
+#    state: absent
