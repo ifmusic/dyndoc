@@ -1,4 +1,7 @@
-# playbook.yml
+# deploy.yml
+
+#This is just a script that automates a bunch of others scripts.
+#In the end, we have to able to gather info from multiple hosts and compute their relations
 ---
 - hosts: servers
   become: yes
@@ -7,9 +10,25 @@
   - name: Copy file
     copy: src=py_netstat.py dest=/opt/py_netstat.py #owner=howardsandford group=admin mode=755
 
+    #Runs script remotely, dumps /tmp/data.pkl as output
+    #TODO: Needs to be adjustable 
   - name: Execute script
     command: 'python /opt/py_netstat.py'
     become: true
+
+    # Specifying a path directly
+  - name: Retrieves data
+    fetch:
+     src: /tmp/data.pkl
+     dest: /tmp/data-{{ inventory_hostname }}
+     flat: yes
+
+#Once all data retrieval is done, we have to upload it to a DB, locally
+- hosts: localhost
+  tasks:
+   - name: Stores in local DB (script execution) locally
+     command: 'python db.py'
+
 
 # In order to avoid race conditions
 
