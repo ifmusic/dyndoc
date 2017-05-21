@@ -5,31 +5,36 @@
 ---
 - hosts: servers
   become: yes
-
+  #vars:
+   #file_to_pickle: services.pkl
   tasks:
   - name: Copy file
     copy: src=py_netstat.py dest=/opt/py_netstat.py #owner=howardsandford group=admin mode=755
+    #force: 
 
     #Runs script remotely, dumps /tmp/data.pkl as output
     #TODO: Needs to be adjustable 
-  - name: Execute script
-    command: 'python /opt/py_netstat.py'
+  - name: Execute scripts
+    command: 'python /opt/py_netstat.py {{inventory_hostname}}'
     become: true
 
     # Specifying a path directly
   - name: Retrieves data
     fetch:
-     src: /tmp/data.pkl
-     dest: /tmp/data-{{ inventory_hostname }}
+     src: '/tmp/services[{{ inventory_hostname }}].pkl'
+     dest: '/tmp/services[{{ inventory_hostname }}].pkl'
      flat: yes
 
 #Once all data retrieval is done, we have to upload it to a DB, locally
 - hosts: localhost
   tasks:
-   - name: Stores in local DB (script execution) locally
-     command: 'python db.py'
+  # - name: Stores in local DB (script execution) locally
+  #   command: 'python db.py /tmp/'
 
-
+  - name: Import all data into the SQLiteDB...
+    command: 'python db.py {{item}}' 
+    with_fileglob:
+      - "/tmp/services*"
 # In order to avoid race conditions
 
 # wait until the file /tmp/foo is present before continuing

@@ -5,6 +5,7 @@ import sys
 
 #TODO: put this pickle code aside...
 
+
 #Missing C style forward function declarations
 def get_hostid_byIPv4(ipv4):
 	try:
@@ -29,8 +30,11 @@ pkl_file.close()
 
 #Load that data into the DB
 conn = sqlite3.connect('db_dyndoc.db')
-#conn.execute('DELETE FROM hosts')
-#conn.commit()
+
+#TODO: Flag this!
+conn.execute('DELETE FROM hosts')
+conn.execute('DELETE FROM hosts_services')
+conn.commit()
 
 #DB> binding, tcpportbinding , processname, pid
 #PY> ProcessName, Pid, binding, tcpport
